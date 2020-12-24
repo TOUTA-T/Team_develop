@@ -15,7 +15,9 @@ class TeamsController < ApplicationController
     @team = Team.new
   end
 
-  def edit; end
+  def edit
+    redirect_to team_url(params[:id]), notice: "アクセスできません" unless current_user.id == @team.owner_id
+  end
 
   def create
     @team = Team.new(team_params)

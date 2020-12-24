@@ -1,5 +1,6 @@
 class AssignsController < ApplicationController
   before_action :authenticate_user!
+  before_action :destroy_check, only: [:destroy]
   before_action :email_exist?, only: [:create]
   before_action :user_exist?, only: [:create]
 
@@ -64,5 +65,11 @@ class AssignsController < ApplicationController
 
   def find_team(team_id)
     team = Team.friendly.find(params[:team_id])
+  end
+
+  def destroy_check
+    unless current_user.id.in?(Array.new([Team.friendly.find(params[:team_id]).owner_id, Assign.find(params[:id]).user_id]))
+      redirect_to team_url(params[:team_id]), notice: "削除できません"
+    end
   end
 end
