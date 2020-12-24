@@ -15,7 +15,9 @@ class TeamsController < ApplicationController
     @team = Team.new
   end
 
-  def edit; end
+  def edit
+    redirect_to team_url(params[:id]), notice: "アクセスできません" unless current_user.id == @team.owner_id
+  end
 
   def create
     @team = Team.new(team_params)
@@ -46,6 +48,19 @@ class TeamsController < ApplicationController
   def dashboard
     @team = current_user.keep_team_id ? Team.find(current_user.keep_team_id) : current_user.teams.first
   end
+
+  def authority_transfer
+    @team = Team.friendly.find(params[:team_id])
+    if current_user.id == @team.owner_id
+      @user = User.find(params[:user_id])
+      @team.update(owner_id: @user.id)
+      AssignMailer.owner_change_mail(@user.email,@team.name).deliver
+      redirect_to @team,notice: 'リーダー権限を移動しました'
+    else
+      redirect_to @team,notice: 'リーダー権限を移動できませんでした'
+    end
+  end
+
 
   private
 
