@@ -23,13 +23,12 @@ class AgendasController < ApplicationController
   def destroy
     @agenda = Agenda.find(params[:id])
     if @agenda.destroy && (current_user.id == @agenda.user_id || current_user.id == @agenda.team.owner_id)
-      NoticeMailer.agenda_delete_mail(@agenda.team.members.pluck(:email),current_user,@agenda).deliver
+      NoticeMailer.agenda_delete_mail(@agenda.team.members.pluck(:email), current_user, @agenda).deliver
       redirect_to dashboard_path, notice: "agenda「#{@agenda.title}」を削除しました"
     else
       redirect_to dashboard_path, notice: "agenda「#{@agenda.title}」を削除できませんでした"
     end
   end
-
 
   private
 

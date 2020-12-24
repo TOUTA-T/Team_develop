@@ -54,13 +54,12 @@ class TeamsController < ApplicationController
     if current_user.id == @team.owner_id
       @user = User.find(params[:user_id])
       @team.update(owner_id: @user.id)
-      AssignMailer.owner_change_mail(@user.email,@team.name).deliver
-      redirect_to @team,notice: 'リーダー権限を移動しました'
+      AssignMailer.owner_change_mail(@user.email, @team.name).deliver
+      redirect_to @team, notice: 'リーダー権限を移動しました'
     else
-      redirect_to @team,notice: 'リーダー権限を移動できませんでした'
+      redirect_to @team, notice: 'リーダー権限を移動できませんでした'
     end
   end
-
 
   private
 

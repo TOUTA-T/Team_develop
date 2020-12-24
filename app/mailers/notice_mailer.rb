@@ -1,7 +1,7 @@
 class NoticeMailer < ApplicationMailer
   default from: 'from@example.com'
 
-  def agenda_delete_mail(email,user,agenda)
+  def agenda_delete_mail(email, user, agenda)
     @email = email
     @user = user
     @agenda = agenda
